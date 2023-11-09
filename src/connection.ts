@@ -547,12 +547,12 @@ export class FTP extends EventEmitter {
                 }
             };
 
-            if (this.options.secure === "implicit") {
-                this._socket = tls.connect(secureOptions, () => onconnect().then(res, rej));
-            } else {
-                socket.once("connect", () => onconnect().then(res, rej));
-                this._socket = socket;
-            }
+              this._socket = socket;
+              if (this.options.secure === 'implicit')
+                socket = tls.connect(secureOptions, onconnect);
+              else {
+                socket.once('connect', onconnect);
+              }
 
             const ondata = (chunk: Buffer) => {
                 if (debug) {
